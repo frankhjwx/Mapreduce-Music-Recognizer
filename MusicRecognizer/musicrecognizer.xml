@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="musicrecognizer" default="all">
+  
+  
+  <property file="musicrecognizer.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*.yarb/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.zip"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.7" value="${jdk.home.1.7}/bin"/>
+  <path id="jdk.classpath.1.7">
+    <fileset dir="${jdk.home.1.7}">
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/charsets.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/compilefontconfig.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/ext/dnsns.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/ext/icedtea-sound.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/ext/java-atk-wrapper.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/ext/localedata.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/ext/sunjce_provider.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/ext/sunpkcs11.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/ext/zipfs.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/javazic.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/jce.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/jsse.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/management-agent.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/resources.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/rhino.jar"/>
+      <include name="../java-1.7.0-openjdk-amd64/jre/lib/rt.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.7}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.7}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.7"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.hdfs.classpath">
+    <fileset dir="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/common">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/hdfs">
+      <patternset refid="library.patterns"/>
+    </fileset>
+    <fileset dir="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  
+  <path id="library.mapreduce.classpath">
+    <fileset dir="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce">
+      <patternset refid="library.patterns"/>
+    </fileset>
+  </path>
+  <!-- Register Custom Compiler Taskdefs -->
+  <property name="javac2.home" value="${idea.home}/lib"/>
+  <path id="javac2.classpath">
+    <pathelement location="${javac2.home}/javac2.jar"/>
+    <pathelement location="${javac2.home}/jdom.jar"/>
+    <pathelement location="${javac2.home}/asm-all.jar"/>
+    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
+  </path>
+  <target name="register.custom.compilers">
+    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
+    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
+  </target>
+  
+  <!-- Modules -->
+  
+  <import file="${basedir}/module_musicrecognizer.xml"/>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.musicrecognizer" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.musicrecognizer" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.musicrecognizer:jar" value="${basedir}/out/artifacts/MusicRecognizer_jar"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.MusicRecognizer.jar" value="${artifacts.temp.dir}/MusicRecognizer.jar"/>
+  </target>
+  
+  <target name="artifact.musicrecognizer:jar" depends="init.artifacts, compile.module.musicrecognizer" description="Build &#39;MusicRecognizer:jar&#39; artifact">
+    <property name="artifact.temp.output.musicrecognizer:jar" value="${artifacts.temp.dir}/MusicRecognizer_jar"/>
+    <mkdir dir="${artifact.temp.output.musicrecognizer:jar}"/>
+    <jar destfile="${temp.jar.path.MusicRecognizer.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <zipfileset dir="${musicrecognizer.output.dir}"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/hdfs/hadoop-hdfs-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/hdfs/hadoop-hdfs-nfs-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/hdfs/hadoop-hdfs-2.6.5-tests.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-api-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-client-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-common-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-registry-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-server-tests-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-server-common-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/common/hadoop-nfs-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/common/hadoop-common-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/common/hadoop-common-2.6.5-tests.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.6.5.jar"/>
+      <zipfileset src="${basedir}/../../hadoop_installs/hadoop-2.6.5/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.6.5-tests.jar"/>
+    </jar>
+    <copy file="${temp.jar.path.MusicRecognizer.jar}" tofile="${artifact.temp.output.musicrecognizer:jar}/MusicRecognizer.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.musicrecognizer:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.musicrecognizer:jar}"/>
+    <copy todir="${artifact.output.musicrecognizer:jar}">
+      <fileset dir="${artifact.temp.output.musicrecognizer:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>

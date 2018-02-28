@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_musicrecognizer" default="compile.module.musicrecognizer">
+  <dirname property="module.musicrecognizer.basedir" file="${ant.file.module_musicrecognizer}"/>
+  
+  <property name="module.jdk.home.musicrecognizer" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.musicrecognizer" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.musicrecognizer" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.musicrecognizer" value="-encoding UTF-8 -source 1.7 -target 1.7 ${compiler.args}"/>
+  
+  <property name="musicrecognizer.output.dir" value="${module.musicrecognizer.basedir}/out/production/MusicRecognizer"/>
+  <property name="musicrecognizer.testoutput.dir" value="${module.musicrecognizer.basedir}/out/test/MusicRecognizer"/>
+  
+  <path id="musicrecognizer.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="musicrecognizer.module.production.classpath">
+    <path refid="${module.jdk.classpath.musicrecognizer}"/>
+    <path refid="library.mapreduce.classpath"/>
+    <path refid="library.hdfs.classpath"/>
+  </path>
+  
+  <path id="musicrecognizer.runtime.production.module.classpath">
+    <pathelement location="${musicrecognizer.output.dir}"/>
+    <path refid="library.mapreduce.classpath"/>
+    <path refid="library.hdfs.classpath"/>
+  </path>
+  
+  <path id="musicrecognizer.module.classpath">
+    <path refid="${module.jdk.classpath.musicrecognizer}"/>
+    <pathelement location="${musicrecognizer.output.dir}"/>
+    <path refid="library.mapreduce.classpath"/>
+    <path refid="library.hdfs.classpath"/>
+  </path>
+  
+  <path id="musicrecognizer.runtime.module.classpath">
+    <pathelement location="${musicrecognizer.testoutput.dir}"/>
+    <pathelement location="${musicrecognizer.output.dir}"/>
+    <path refid="library.mapreduce.classpath"/>
+    <path refid="library.hdfs.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.musicrecognizer">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.musicrecognizer">
+    <patternset refid="excluded.from.module.musicrecognizer"/>
+  </patternset>
+  
+  <path id="musicrecognizer.module.sourcepath">
+    <dirset dir="${module.musicrecognizer.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.musicrecognizer" depends="compile.module.musicrecognizer.production,compile.module.musicrecognizer.tests" description="Compile module MusicRecognizer"/>
+  
+  <target name="compile.module.musicrecognizer.production" depends="register.custom.compilers" description="Compile module MusicRecognizer; production classes">
+    <mkdir dir="${musicrecognizer.output.dir}"/>
+    <javac2 destdir="${musicrecognizer.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.musicrecognizer}/javac">
+      <compilerarg line="${compiler.args.musicrecognizer}"/>
+      <bootclasspath refid="musicrecognizer.module.bootclasspath"/>
+      <classpath refid="musicrecognizer.module.production.classpath"/>
+      <src refid="musicrecognizer.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.musicrecognizer"/>
+    </javac2>
+    
+    <copy todir="${musicrecognizer.output.dir}">
+      <fileset dir="${module.musicrecognizer.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.musicrecognizer.tests" depends="register.custom.compilers,compile.module.musicrecognizer.production" description="compile module MusicRecognizer; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.musicrecognizer" description="cleanup module">
+    <delete dir="${musicrecognizer.output.dir}"/>
+    <delete dir="${musicrecognizer.testoutput.dir}"/>
+  </target>
+</project>
