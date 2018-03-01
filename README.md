@@ -16,7 +16,7 @@ MusicRec/data - 输入音频库，包含多个音频
 
 MusicRec/questdata - 需要识别的音频(仅实现了识别单个音频)
 
-中间结果目录
+### 中间结果目录
 
 MusicRec/FactorData - 得到的特征文件
 
@@ -24,7 +24,7 @@ MusicRec/FactorExtractortmp - 中间结果
 
 MusicRec/MusicRecognizertmp - 中间结果
 
-最终结果目录
+### 最终结果目录
 
 MusicRec/output - 包含单个文件，表示特征匹配top5的结果
 
@@ -33,8 +33,8 @@ MusicRec/output - 包含单个文件，表示特征匹配top5的结果
 
 音频识别 hadoop jar MusicRecognizer.jar xxx.wav
 
-##注意点
+## 注意点
 只能处理44100Hz 单声道 16bit 无标签的wav格式音频
 
-##致谢
+## 致谢
 https://github.com/winston-wen/Shazam winston-wen的单机音频识别程序
