@@ -11,19 +11,29 @@
 
 ## 文件目录
 MusicRec/input - 输入文件，包含标识需要提取特征音频文件名的单个文件，每个文件名以逗号隔开
+
 MusicRec/data - 输入音频库，包含多个音频
+
 MusicRec/questdata - 需要识别的音频(仅实现了识别单个音频)
 
+
 中间结果目录
+
 MusicRec/FactorData - 得到的特征文件
+
 MusicRec/FactorExtractortmp - 中间结果
+
 MusicRec/MusicRecognizertmp - 中间结果
 
+
 最终结果目录
+
 MusicRec/output - 包含单个文件，表示特征匹配top5的结果
+
 
 ## Usage
 特征提取 hadoop jar FactorExtractor.jar
+
 音频识别 hadoop jar MusicRecognizer.jar xxx.wav
 
 ##注意点
